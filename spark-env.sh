@@ -34,7 +34,7 @@
 
 # Options read in YARN client/cluster mode
 # - SPARK_CONF_DIR, Alternate conf dir. (Default: ${SPARK_HOME}/conf)
-HADOOP_CONF_DIR=/etc/hadoop/
+HADOOP_CONF_DIR=/hadoop/etc/hadoop/
 # - YARN_CONF_DIR, to point Spark towards YARN configuration files when you use YARN
 # - SPARK_EXECUTOR_CORES, Number of cores for the executors (Default: 1).
 # - SPARK_EXECUTOR_MEMORY, Memory per Executor (e.g. 1000M, 2G) (Default: 1G)

@@ -1,1 +1,1 @@
-docker build --rm=true -t lucas/myapp .
+docker build --rm=true -f ./Dockerfile -t lucas/myapp .

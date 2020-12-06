@@ -12,21 +12,19 @@ import java.net.URI
 object MyApp {
   def main(args: Array[String]) {
 
-val configuration = new Configuration();
-//FileSystem fs = FileSystem.get(new URI(<url:port>), configuration);
-val fs = FileSystem.get(new URI("hdfs://namenode:8020"), configuration);
-val filePath = new Path("hdfs://namenode:8020/user/input/abcd.txt");
-val fsDataInputStream = fs.open(filePath);
-val br = new BufferedReader(new InputStreamReader(fsDataInputStream));
-val str = Stream.continually(br.readLine()).takeWhile(_ != null).mkString("\n")
-println(str)
-br.close()
+    val configuration = new Configuration();
+    //FileSystem fs = FileSystem.get(new URI(<url:port>), configuration);
+    val fs = FileSystem.get(new URI("hdfs://namenode:8020"), configuration);
+    val filePath = new Path("hdfs://namenode:8020/user/input/abcd.txt");
+    val fsDataInputStream = fs.open(filePath);
+    val br = new BufferedReader(new InputStreamReader(fsDataInputStream));
+    val str = Stream.continually(br.readLine()).takeWhile(_ != null).mkString("\n")
+    println(str)
+    br.close()
 
 
-
-    val logFile = "/app/README.md" // Should be some file on your system
-    val spark = SparkSession.builder.appName("My Application").getOrCreate()
-    val logData = spark.read.textFile(logFile).cache()
+    val spark = SparkSession.builder.appName("My Application1").getOrCreate()
+    val logData = spark.read.textFile("hdfs:///README.md").cache()
     val numAs = logData.filter(line => line.contains("a")).count()
     val numBs = logData.filter(line => line.contains("b")).count()
     println(s"Lines with a: $numAs, Lines with b: $numBs")
