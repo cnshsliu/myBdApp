@@ -6,7 +6,7 @@ val batch = 10
 var total = 0
 val ssc = new StreamingContext(sc, Seconds(batch))
 
-ssc.checkpoint("hdfs:///spark/checkpoint")
+ssc.checkpoint("hdfs:///spark/streaming/checkpoint")
 
 /*
  * 非交互方式下创建StreamingContext的方法
@@ -14,7 +14,7 @@ val conf = new SparkConf().setAppName("NginxAnay")
 val ssc = new StreamingContext(conf, Seconds(batch))
 */
 
-val lines = ssc.textFileStream("hdfs:///spark/streaming");
+val lines = ssc.textFileStream("hdfs:///spark/streaming/weblog");
 
 // 总PV
 lines.count().print()
