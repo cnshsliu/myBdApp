@@ -21,8 +21,9 @@ COPY etc/hadoop/hdfs-site.xml /hadoop/etc/hadoop/hdfs-site.xml
 COPY etc/hadoop/mapred-site.xml /hadoop/etc/hadoop/mapred-site.xml
 COPY etc/hadoop/yarn-site.xml /hadoop/etc/hadoop/yarn-site.xml
 
-COPY spark-env.sh /spark/conf
-COPY conf/log4j.properties /spark/conf
+COPY conf/hive-site.xml /spark/conf/hive-site.xml
+COPY conf/spark-env.sh /spark/conf/spark-env.sh
+COPY conf/log4j.properties /spark/conf/log4j.properties
 ENV SPARK_MASTER_NAME spark-master
 ENV SPARK_MASTER_PORT 7077
 ENV SPARK_APPLICATION_MAIN_CLASS com.lucas.MyApp
