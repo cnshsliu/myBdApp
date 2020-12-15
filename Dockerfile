@@ -1,11 +1,9 @@
-FROM bde2020/spark-scala-template:3.0.1-hadoop3.2
+FROM lucas/spark-scala-template
 MAINTAINER Lucas Liu <liukehong@gmail.com>
 
 USER root
 
-COPY download/apt.deb /tmp/apt.deb
-COPY download/hadoop-3.2.1.tar.gz /tmp/hadoop-3.2.1.tar.gz
-COPY download/donation.zip /tmp/donation.zip
+COPY resources/hadoop-3.2.1.tar.gz /tmp/hadoop-3.2.1.tar.gz
 WORKDIR /tmp
 RUN tar xzf hadoop-3.2.1.tar.gz && \
     rm -rf /hadoop 2>/dev/null  && \
@@ -37,4 +35,6 @@ RUN rm -rf /app/download 2>/dev/null  && \
     rm /app/*.sh 2>/dev/null && \
     rm -rf /app/etc 2>/dev/null && \
     rm -rf /app/conf 2>/dev/null  && \
-    rm  /app/Dockerfile
+    rm  /app/Dockerfile && \
+    rm  /app/Dockerfile.template && \
+    rm -rf /app/resources
