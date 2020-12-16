@@ -10,26 +10,49 @@ COPY resources/sbt-1.4.5.tgz  /tmp
 RUN tar -xzf /tmp/sbt-1.4.5.tgz -C /usr/local
 RUN rm /tmp/sbt-1.4.5.tgz
 
-ENV PATH /usr/local/sbt/bin:${PATH}
+ENV PATH /usr/local/sbt/bin:/spark/bin:${PATH}
 
 WORKDIR /app
 
 # Pre-install base libraries
 ADD build.sbt /app/
 ADD plugins.sbt /app/project/
+ADD conf/sbt.repositories /root/.sbt/repositories
 RUN sbt update
-
 COPY template.sh /
+COPY resources/hadoop-3.2.1.tar.gz /tmp/hadoop-3.2.1.tar.gz
+WORKDIR /tmp
+RUN tar xzf hadoop-3.2.1.tar.gz && \
+    rm -rf /hadoop 2>/dev/null  && \
+    mv hadoop-3.2.1 /hadoop && \
+    rm /tmp/hadoop-3.2.1.tar.gz
+COPY conf/bashrc /root/.bashrc
+COPY etc/apt/sources.list /etc/apt/sources.list
+COPY conf/sbt.repositories /root/.sbt/repositories
+COPY etc/hadoop/core-site.xml /hadoop/etc/hadoop/core-site.xml
+COPY etc/hadoop/hdfs-site.xml /hadoop/etc/hadoop/hdfs-site.xml
+COPY etc/hadoop/mapred-site.xml /hadoop/etc/hadoop/mapred-site.xml
+COPY etc/hadoop/yarn-site.xml /hadoop/etc/hadoop/yarn-site.xml
 
-ENV SPARK_APPLICATION_MAIN_CLASS Application
+COPY conf/hive-site.xml /spark/conf/hive-site.xml
+COPY conf/spark-env.sh /spark/conf/spark-env.sh
+COPY conf/log4j.properties /spark/conf/log4j.properties
+COPY ./src/ /app/src
+WORKDIR /app
+RUN sbt clean assembly
+
+ENV SPARK_APPLICATION_MAIN_CLASS com.lucas.MyApp
+ENV SPARK_APPLICATION_ARGS "I am app template"
 
 # Copy the build.sbt first, for separate dependency resolving and downloading
+ONBUILD WORKDIR /app
 ONBUILD COPY build.sbt /app/
-ONBUILD COPY project /app/project
+#ONBUILD COPY project /app/
+ONBUILD COPY conf/sbt.repositories /root/.sbt/repositories
 ONBUILD RUN sbt update
 
 # Copy the source code and build the application
-ONBUILD COPY . /app
+ONBUILD COPY ./src/ /app/src
 ONBUILD RUN sbt clean assembly
 
 CMD ["/template.sh"]

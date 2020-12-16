@@ -11,7 +11,10 @@ import java.net.URI
 
 object MyApp {
   def main(args: Array[String]) {
+    val argsLine = args.mkString(" ")
+    println(s"args: $argsLine");
 
+    /*
     val configuration = new Configuration();
     val fs = FileSystem.get(new URI("hdfs://namenode:8020"), configuration);
     val filePath = new Path("hdfs://namenode:8020/tmp/myapp/README.md");
@@ -20,6 +23,7 @@ object MyApp {
     val str = Stream.continually(br.readLine()).takeWhile(_ != null).mkString("\n")
     println(str)
     br.close()
+    */
 
 
     val spark = SparkSession.builder.appName("My Application1").getOrCreate()
