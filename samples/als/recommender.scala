@@ -198,3 +198,61 @@ def areaUnderCurve(
          
 
 
+def predictMostListened(train: DataFrame)(allData: DataFrame) = {
+  val listenCounts = train.
+  groupBy("artist").agg(sum("count").as("prediction")).
+  select("artist", "prediction")
+
+  allData.join(listenCounts, Seq("artist"), "left_outer").
+  select("user", "artist", "prediction")
+}
+
+areaUnderCurve(cvData, bAllArtistIDs, predictMostListened(trainData))
+
+
+
+val evaluations = 
+  for( rank     <- Seq(5, 40);
+       regParam <- Seq(4.0, 0.0001);
+       alpha    <- Seq(1.0, 40.0))
+    yield {
+      val model = new ALS().
+       setSeed(Random.nextLong()).
+       setImplicitPrefs(true).
+       setRank(rank).setRegParam(regParam).
+       setAlpha(alpha).setMaxIter(20).
+       setUserCol("user").setItemCol("artist").
+       setRatingCol("count").setPredictionCol("prediction").
+       fit(trainData)
+
+      val auc = areaUnderCurve(cvData, bAllArtistIDs, model.transform)
+
+      model.userFactors.unpersist()
+      model.itemFactors.unpersist()
+      
+      (auc, (rank, regParam, alpha))
+ }
+
+evaluations.sorted.reverse.foreach(println)
+
+
+
+
+import org.apache.spark.ml.recommendation._
+import scala.util.Random
+
+val model = new ALS().setSeed(Random.nextLong()).
+  setImplicitPrefs(true).
+  setRank(30).
+  setRegParam(4).
+  setAlpha(40.0).
+  setMaxIter(5).
+  setUserCol("user").
+  setItemCol("artist").
+  setRatingCol("count").
+  setPredictionCol("prediction").
+  fit(trainData)
+
+
+model.userFactors.show(1, truncate = false)
+

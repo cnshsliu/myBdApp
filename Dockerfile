@@ -3,6 +3,7 @@ MAINTAINER Lucas Liu <liukehong@gmail.com>
 
 USER root
 ENV SPARK_MASTER_NAME spark-master
+ENV SPARK_MASTER_NAME spark-master
 ENV SPARK_MASTER_PORT 7077
 ENV SPARK_APPLICATION_MAIN_CLASS com.lucas.MyApp
 ENV SPARK_APPLICATION_ARGS "foo bar baz"
