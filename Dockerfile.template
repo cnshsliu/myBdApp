@@ -18,7 +18,7 @@ WORKDIR /app
 ADD build.sbt /app/
 ADD plugins.sbt /app/project/
 ADD conf/sbt.repositories /root/.sbt/repositories
-RUN sbt update
+RUN sbt -v -mem 2048 update
 COPY template.sh /
 COPY resources/hadoop-3.2.1.tar.gz /tmp/hadoop-3.2.1.tar.gz
 WORKDIR /tmp
@@ -49,7 +49,7 @@ ONBUILD WORKDIR /app
 ONBUILD COPY build.sbt /app/
 #ONBUILD COPY project /app/
 ONBUILD COPY conf/sbt.repositories /root/.sbt/repositories
-ONBUILD RUN sbt update
+ONBUILD RUN sbt -v update
 
 # Copy the source code and build the application
 ONBUILD COPY ./src/ /app/src
