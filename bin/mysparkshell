@@ -1,0 +1,2 @@
+#!/bin/bash
+/spark/bin/spark-shell  --jars /bdi/resources/mysql-connector-java-8.0.22.jar,/bdi/resources/kudu-spark3_2.12-1.13.0.7.1.5.2-1.jar --master local[*]

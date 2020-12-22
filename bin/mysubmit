@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/spark/bin/spark-submit  --jars /bdi/resources/mysql-connector-java-8.0.22.jar,/bdi/resources/kudu-spark3_2.12-1.13.0.7.1.5.2-1.jar --master local[*] --class=$1    target/scala-2.12/myapp_2.12-1.0.jar
